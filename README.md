@@ -2,305 +2,321 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>LC Jurista - Sistema Completo de Empréstimos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Game Ras Poker 2025</title>
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3141/3141129.png">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-body {font-family: Arial; background: linear-gradient(135deg,#1c1c1c,#2e2e2e); color:#f5f5f5; margin:0; padding:20px;}
-h1 {text-align:center;color:#ffd700;margin-bottom:10px;}
-.resumo {display:flex;justify-content:space-around;margin-bottom:15px;font-weight:bold;
-  background:linear-gradient(135deg,#333,#444);padding:10px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.6);}
-table {width:100%;border-collapse:collapse;margin-top:10px;border-radius:12px;overflow:hidden;box-shadow:0 0 15px rgba(0,0,0,0.8);}
-th,td {padding:10px;text-align:center;}
-th {background:linear-gradient(135deg,#444,#222);color:#ffd700;cursor:pointer;}
-tr {background:#2c2c2c;}
-tr:nth-child(even) {background:#3a3a3a;}
-.inadimplente {background:linear-gradient(135deg,#5a0000,#330000)!important;color:#fff;font-weight:bold;}
-.adimplente {background:linear-gradient(135deg,#003300,#005500)!important;color:#d4ffd4;}
-.reativado {background:linear-gradient(135deg,#003366,#005599)!important;color:#fff;}
-button {padding:5px 10px;margin:2px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;}
-button:hover {opacity:0.9;}
-.btn-add{background:#0066cc;color:#fff;}
-.btn-pay{background:#ff8800;color:#fff;}
-.btn-quit{background:#00aa00;color:#fff;}
-.btn-react{background:#aa00aa;color:#fff;}
-.btn-png{background:#4444aa;color:#fff;}
-.btn-all{background:#ff0066;color:#fff;}
-#loginOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;z-index:1000;}
-#loginBox{background:#222;padding:30px;border-radius:12px;box-shadow:0 0 20px #000;text-align:center;}
-#loginBox input{margin:5px;padding:5px;width:200px;}
-#charts {display:flex;justify-content:space-around;margin-top:20px;flex-wrap:wrap;}
-canvas{background:#fff;border-radius:10px;padding:10px;margin:10px;}
-.filtros {margin-bottom:10px;text-align:center;}
-.darkMode {background: #121212; color: #fff;}
+/* ====== Estilo Geral ====== */
+body {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  margin:0; padding:0;
+  background: url('https://i.imgur.com/3E9xL3c.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color:#fff;
+  display:flex; flex-direction:column; height:100vh; overflow:hidden;
+}
+h1,h2{margin:10px 0;text-align:center;}
+button{cursor:pointer; font-weight:bold; border:none; border-radius:8px; padding:8px 16px; margin:2px; transition:0.3s;}
+button:hover{transform:scale(1.05); opacity:0.9;}
+
+/* ====== Layout Abas ====== */
+.tabs{display:flex; justify-content:center; margin-top:10px; gap:10px;}
+.tab-btn{background:#3e2723;color:#ffe082; padding:10px 20px; flex:1; text-align:center; font-size:14px;}
+.tab-btn.active{background:#ffcc00;color:#3e2723;}
+.tab-content{display:none; margin:0 auto; max-width:750px; flex:1; overflow-y:auto; padding:10px; transition:opacity 0.3s;}
+.tab-content.active{display:block; opacity:1;}
+
+/* ====== Ranking ====== */
+.ranking{background:rgba(93,64,55,0.9); padding:15px; border-radius:15px; border:2px solid #ffcc00; box-shadow:0 4px 10px rgba(0,0,0,0.5);}
+.ranking table{width:100%; border-collapse:collapse; font-size:14px;}
+.ranking th, .ranking td{padding:8px; text-align:center; border:1px solid #a1887f; color:#000; word-break:break-word;}
+.ranking th{background:#ffcc00; color:#000;}
+.pos1_8 td{background:#81d4fa; color:#000;}
+.pos9_17 td{background:#ff8a80; color:#000;}
+td[contenteditable="true"]{background:rgba(255,236,179,0.3); border:1px dashed #ffcc00; border-radius:5px;}
+.botoes-container{display:flex; justify-content:center; flex-wrap:wrap; gap:3px;}
+.btn-pontos{padding:3px 8px; color:#fff; border-radius:6px; font-size:12px; font-weight:bold; transition:0.2s;}
+.btn-pontos:hover{transform:scale(1.1);}
+.btn-presenca{background:#4CAF50;}
+.btn-segundo{background:#2196F3;}
+.btn-terceiro{background:#9C27B0;}
+.btn-quarto{background:#FF9800;}
+.btn-quinto{background:#795548;}
+.btn-campeao{background:#FF5722;}
+
+/* ====== Comandas ====== */
+table.comandas{width:100%; border-collapse:collapse; margin-top:10px; font-size:13px;}
+table.comandas th{background:#ffcc00; color:#000;}
+table.comandas td, table.comandas th{border:1px solid #888; padding:6px 8px; text-align:center; word-break:break-word;}
+td[contenteditable="true"]{background:#fffae5; border:1px dashed #ffcc00; border-radius:5px;}
+.product-cell{font-weight:bold; color:#fff; padding:4px 6px; border-radius:4px; display:inline-block; margin:1px;}
+.product-btn{padding:2px 6px; margin:1px; border-radius:4px; font-weight:bold; font-size:12px; color:#fff; border:none; cursor:pointer; transition:0.2s;}
+.product-btn:hover{transform:scale(1.1);}
+.status-aberta{background:#81d4fa;}
+.status-fechada{background:#ff8a80;}
+.produtos-vendidos span{margin:0 2px; padding:2px 4px; border-radius:3px; color:#fff; font-weight:bold; display:inline-block; font-size:12px;}
+
+/* ====== Premiação ====== */
+.premiacao{background:rgba(59,42,27,0.9); padding:20px; border-radius:20px; box-shadow:0 4px 10px rgba(0,0,0,0.5);}
+.premiacao input{width:100%; padding:12px; border-radius:12px; border:2px solid #d4af37; margin-bottom:10px; text-align:center; font-size:16px;}
+.premiacao button{width:100%; padding:12px; border-radius:12px; margin-bottom:6px; background:#2e7d32; color:#fff; font-size:16px; transition:0.3s;}
+.premiacao button:hover{transform:scale(1.05);}
+#salvarQuinto{background:#c49102;}
+#desfazerQuinto{background:#a93226;}
+.resultado table{width:100%; border-collapse:collapse; margin-top:10px; font-size:14px;}
+.resultado th, .resultado td{border:1px solid #d4af37; padding:8px; color:#000; font-weight:600;}
+#mensagem{display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); background:rgba(212,175,55,0.95); color:#000; font-weight:bold; padding:12px 20px; border-radius:12px; z-index:999; animation:fadein 0.5s;}
+@keyframes fadein{0%{opacity:0;}100%{opacity:1;}}
+
+/* ====== Scroll interno suave ====== */
+.tab-content::-webkit-scrollbar{width:8px;}
+.tab-content::-webkit-scrollbar-thumb{background:rgba(255,204,0,0.6); border-radius:4px;}
+.tab-content::-webkit-scrollbar-track{background:rgba(0,0,0,0.2); border-radius:4px;}
 </style>
 </head>
 <body>
 
-<div id="loginOverlay">
-  <div id="loginBox">
-    <h2>Login LC Jurista</h2>
-    <input type="text" id="user" placeholder="Usuário"><br>
-    <input type="password" id="pass" placeholder="Senha"><br>
-    <button onclick="login()">Entrar</button>
+<h1>🏠 Home Game Ras Poker 2025</h1>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="rankingTab">🏆 Ranking</button>
+  <button class="tab-btn" data-tab="comandasTab">🍻 Comandas</button>
+  <button class="tab-btn" data-tab="premiacaoTab">💰 Premiação</button>
+</div>
+
+<!-- ====== Ranking ====== -->
+<div class="tab-content active" id="rankingTab">
+  <div class="ranking">
+    <button onclick="adicionarJogador()">➕ Adicionar Jogador</button>
+    <button onclick="salvarRanking()">💾 Salvar Local</button>
+    <table id="rankingTable">
+      <tr><th>Posição</th><th>Nome</th><th>Pontos</th><th>Presenças</th><th>Vitórias</th><th>Adicionar Pontos</th></tr>
+    </table>
   </div>
 </div>
 
-<h1>LC Jurista - Sistema Completo de Empréstimos</h1>
-
-<div class="resumo">
-  <div>Total Emprestado: R$ <span id="totalEmprestado">0</span></div>
-  <div>Total Retorno Juros: R$ <span id="totalJuros">0</span></div>
-  <div>Total Retorno Diárias: R$ <span id="totalDiarias">0</span></div>
-  <div>Total Pago: R$ <span id="totalPago">0</span></div>
+<!-- ====== Comandas ====== -->
+<div class="tab-content" id="comandasTab">
+  <h2>Comandas Abertas</h2>
+  <button onclick="adicionarComanda()">➕ Nova Comanda</button>
+  <table id="comandaAbertasTable" class="comandas">
+    <tr><th>Nome</th><th>Número</th><th>Total</th><th>Finalizar</th><th>Produtos</th><th>Vendidos</th></tr>
+  </table>
+  <h2>Comandas Fechadas</h2>
+  <table id="comandaFechadasTable" class="comandas">
+    <tr><th>Nome</th><th>Número</th><th>Total</th><th>Comprovante PNG</th></tr>
+  </table>
 </div>
 
-<div class="filtros">
-  <input type="text" id="buscaCliente" placeholder="Buscar cliente..." onkeyup="filtrar()">
-  <button onclick="toggleTheme()">🌗 Tema Claro/Escuro</button>
-</div>
-
-<button class="btn-add" onclick="adicionarCliente()">+ Adicionar Cliente</button>
-<button class="btn-all" onclick="gerarRelatorioGeral()">📊 Relatório Consolidado</button>
-<button class="btn-all" onclick="exportExcel()">📥 Exportar Excel</button>
-
-<table id="tabelaClientes">
-<thead>
-<tr>
-<th onclick="ordenarTabela(0)">Nome</th>
-<th>CPF</th>
-<th>Endereço</th>
-<th>Telefone</th>
-<th onclick="ordenarTabela(4)">Valor (R$)</th>
-<th>Juros (%)</th>
-<th>Total Inicial (R$)</th>
-<th>Data Inicial</th>
-<th>Dias Atraso</th>
-<th>Multa (R$)</th>
-<th>Total Atual (R$)</th>
-<th>Score</th>
-<th>Ações</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-
-<div id="charts">
-  <canvas id="graficoStatus" width="400" height="300"></canvas>
-  <canvas id="graficoScore" width="400" height="300"></canvas>
+<!-- ====== Premiação ====== -->
+<div class="tab-content" id="premiacaoTab">
+  <div class="premiacao">
+    <div id="mensagem">Quinto salvo com sucesso!</div>
+    <label>Valor total arrecadado (R$):</label>
+    <input type="number" id="valorTotal" placeholder="Digite o valor total">
+    <button id="calcular">Calcular Divisão</button>
+    <button id="salvarQuinto" disabled>Salvar o Quinto</button>
+    <button id="desfazerQuinto" disabled>Desfazer Quinto</button>
+    <div id="resultado" class="resultado"></div>
+  </div>
 </div>
 
 <script>
-/* ===== LOGIN ===== */
-function login() {
-  const user=document.getElementById('user').value;
-  const pass=document.getElementById('pass').value;
-  if(user==='lcjurista' && pass==='1234'){document.getElementById('loginOverlay').style.display='none';}
-  else{alert('Usuário ou senha incorretos');}
-}
+/* ====== Firebase Config Genérica ====== */
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_AUTH_DOMAIN",
+  projectId: "SEU_PROJECT_ID",
+  storageBucket: "SEU_STORAGE_BUCKET",
+  messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+  appId: "SEU_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-/* ===== DADOS ===== */
-let clientes=[
-  {nome:"João da Silva",cpf:"12345678909",endereco:"Rua A, 123",telefone:"(11)98888-1111",emprestimos:[{valor:1000,juros:30,data:"2025-08-20",historico:[]}],status:"ativo",obs:""},
-  {nome:"Maria Oliveira",cpf:"98765432100",endereco:"Av. B, 456",telefone:"(11)97777-2222",emprestimos:[{valor:2000,juros:30,data:"2025-08-15",historico:[]}],status:"ativo",obs:""}
-];
-
-let dark=false;
-
-/* ===== VALIDAÇÃO CPF ===== */
-function validarCPF(cpf) {
-  cpf = cpf.replace(/[^\d]+/g,''); if(cpf.length!==11) return false;
-  if (/^(\d)\1+$/.test(cpf)) return false;
-  let soma=0; for(let i=0;i<9;i++) soma+=parseInt(cpf.charAt(i))*(10-i);
-  let resto=(soma*10)%11; if(resto===10) resto=0; if(resto!==parseInt(cpf.charAt(9))) return false;
-  soma=0; for(let i=0;i<10;i++) soma+=parseInt(cpf.charAt(i))*(11-i);
-  resto=(soma*10)%11; if(resto===10) resto=0; if(resto!==parseInt(cpf.charAt(10))) return false;
-  return true;
-}
-function cpfDuplicado(cpf){return clientes.some(c=>c.cpf===cpf);}
-
-/* ===== SCORE ===== */
-function calcularScore(historico){
-  if(historico.length===0) return 50;
-  let pontos=50; historico.forEach(p=>{if(p.pagoNoPrazo)pontos+=10;else pontos-=5;});
-  return Math.max(0,Math.min(100,pontos));
-}
-
-/* ===== CALCULO ATRASO ===== */
-function calcularAtraso(cliente,hoje){
-  let atrasoTotal=0;
-  cliente.emprestimos.forEach(e=>{
-    const dataInicial=new Date(e.data);
-    const diasPassados=Math.floor((hoje-dataInicial)/(1000*60*60*24));
-    if(diasPassados>30) atrasoTotal+=diasPassados-30;
+/* ====== Abas ====== */
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
   });
-  return atrasoTotal;
-}
+});
 
-/* ===== ATUALIZAR TABELA ===== */
-function atualizarTabela(){
-  const tbody=document.querySelector("#tabelaClientes tbody");
-  tbody.innerHTML="";
-  let totalEmprestado=0,totalJuros=0,totalDiarias=0,totalPago=0;
-  const hoje=new Date();
-  clientes.sort((a,b)=>calcularAtraso(b,hoje)-calcularAtraso(a,hoje));
-  clientes.forEach((c,i)=>{
-    let valorTotal=0,jurosTotal=0,multaTotal=0,totalAtual=0,scoreTotal=0,diasAtraso=0;
-    c.emprestimos.forEach(e=>{
-      const valor=parseFloat(e.valor);
-      const juros=valor*(e.juros/100);
-      const totalInicial=valor+juros;
-      const dataInicial=new Date(e.data);
-      const diasPassados=Math.floor((hoje-dataInicial)/(1000*60*60*24));
-      let multa=0; if(diasPassados>30) multa=(diasPassados-30)*30;
-      valorTotal+=valor; jurosTotal+=juros; multaTotal+=multa; totalAtual+=totalInicial+multa; diasAtraso+=diasPassados>30?diasPassados-30:0;
-      e.historico.forEach(h=>totalPago+=h.valor);
-    });
-    const tr=document.createElement("tr");
-    if(c.status==="quitado") tr.className="adimplente";
-    else if(c.status==="reativado") tr.className="reativado";
-    else tr.className=diasAtraso>0?"inadimplente":"adimplente";
-    tr.innerHTML=`
-      <td contenteditable="true">${c.nome}</td>
-      <td>${c.cpf}</td>
-      <td contenteditable="true">${c.endereco}</td>
-      <td contenteditable="true">${c.telefone}</td>
-      <td>${valorTotal.toFixed(2)}</td>
-      <td>${c.emprestimos.map(e=>e.juros).join(",")}</td>
-      <td>${(valorTotal+jurosTotal).toFixed(2)}</td>
-      <td>${c.emprestimos.map(e=>new Date(e.data).toLocaleDateString("pt-BR")).join(", ")}</td>
-      <td>${diasAtraso}</td>
-      <td>${multaTotal.toFixed(2)}</td>
-      <td>${totalAtual.toFixed(2)}</td>
-      <td>${calcularScore([].concat(...c.emprestimos.map(e=>e.historico)))}</td>
-      <td>
-        ${c.status!=="quitado"?`<button class="btn-pay" onclick="registrarPagamento(${i})">Pagamento</button>`:""}
-        ${c.status!=="quitado"?`<button class="btn-quit" onclick="quitar(${i})">Quitar</button>`:""}
-        ${c.status==="quitado"?`<button class="btn-react" onclick="reativar(${i})">Reativar</button>`:""}
-        <button class="btn-png" onclick="gerarPNG(${i})">PNG</button>
-      </td>`;
-    tbody.appendChild(tr);
-    totalEmprestado+=valorTotal; totalJuros+=jurosTotal; totalDiarias+=multaTotal;
+/* ====== Dados ====== */
+let jogadores = JSON.parse(localStorage.getItem("rankingJogadores"))||[];
+let comandas = JSON.parse(localStorage.getItem("comandas"))||[];
+let premiosOriginais = {};
+let quintoAdicionado = false;
+
+/* ====== Ranking ====== */
+function salvarRanking(){
+  localStorage.setItem("rankingJogadores", JSON.stringify(jogadores));
+  syncRankingFirestore();
+}
+function adicionarJogador(){
+  let nome=prompt("Digite o nome do novo jogador:");
+  if(nome){jogadores.push({nome:nome.trim(), pontos:0, presencas:0, vitorias:0}); atualizarRanking();}
+}
+function atualizarRanking(){
+  const table=document.getElementById("rankingTable");
+  table.innerHTML='<tr><th>Posição</th><th>Nome</th><th>Pontos</th><th>Presenças</th><th>Vitórias</th><th>Adicionar Pontos</th></tr>';
+  jogadores.sort((a,b)=>b.pontos-a.pontos);
+  jogadores.forEach((j,i)=>{
+    let row=table.insertRow();
+    row.innerHTML=`
+      <td>${i+1}</td>
+      <td contenteditable="true" oninput="jogadores[${i}].nome=this.innerText">${j.nome}</td>
+      <td contenteditable="true" oninput="jogadores[${i}].pontos=parseInt(this.innerText)||0">${j.pontos}</td>
+      <td contenteditable="true" oninput="jogadores[${i}].presencas=parseInt(this.innerText)||0">${j.presencas}</td>
+      <td contenteditable="true" oninput="jogadores[${i}].vitorias=parseInt(this.innerText)||0">${j.vitorias}</td>
+      <td class="botoes-container">
+        <button class="btn-pontos btn-presenca" onclick="addPonto(${i},10)">+ Presença</button>
+        <button class="btn-pontos btn-campeao" onclick="addPonto(${i},250)">Campeão</button>
+        <button class="btn-pontos btn-segundo" onclick="addPonto(${i},150)">2º</button>
+        <button class="btn-pontos btn-terceiro" onclick="addPonto(${i},100)">3º</button>
+        <button class="btn-pontos btn-quarto" onclick="addPonto(${i},70)">4º</button>
+        <button class="btn-pontos btn-quinto" onclick="addPonto(${i},50)">5º</button>
+      </td>
+    `;
   });
-  document.getElementById("totalEmprestado").textContent=totalEmprestado.toFixed(2);
-  document.getElementById("totalJuros").textContent=totalJuros.toFixed(2);
-  document.getElementById("totalDiarias").textContent=totalDiarias.toFixed(2);
-  document.getElementById("totalPago").textContent=totalPago.toFixed(2);
-  atualizarGraficos();
+  salvarRanking();
+}
+function addPonto(idx, pts){
+  jogadores[idx].pontos += pts;
+  if(pts===10) jogadores[idx].presencas+=1;
+  atualizarRanking();
 }
 
-/* ===== FUNÇÕES PAGAMENTO ===== */
-function registrarPagamento(i){
-  const cliente=clientes[i];
-  const valorPago=parseFloat(prompt("Digite o valor pago pelo cliente:"));
-  if(isNaN(valorPago)||valorPago<=0) return;
-  const emprestimoAtual=cliente.emprestimos[cliente.emprestimos.length-1];
-  if(valorPago>=emprestimoAtual.valor*(emprestimoAtual.juros/100)){
-    if(confirm("Pagamento maior que juros detectado. Reiniciar 30 dias?")) emprestimoAtual.data=new Date().toISOString().split("T")[0];
-    emprestimoAtual.historico.push({valor:valorPago,pagoNoPrazo:true});
-  } else emprestimoAtual.historico.push({valor:valorPago,pagoNoPrazo:false});
-  atualizarTabela();
-}
-function quitar(i){ if(confirm("Deseja quitar esta dívida?")) {clientes[i].status="quitado"; atualizarTabela();} }
-function reativar(i){
-  const cliente=clientes[i];
-  const novoValor=parseFloat(prompt("Digite o novo valor do empréstimo para reativação:"));
-  if(isNaN(novoValor)||novoValor<=0) return alert("Valor inválido");
-  cliente.emprestimos.push({valor:novoValor,juros:30,data:new Date().toISOString().split("T")[0],historico:[]});
-  cliente.status="reativado";
-  atualizarTabela();
-}
-
-/* ===== ADICIONAR CLIENTE ===== */
-function adicionarCliente(){
-  const nome=prompt("Nome do cliente:");
-  const cpf=prompt("CPF do cliente:");
-  if(!validarCPF(cpf)) return alert("CPF inválido");
-  if(cpfDuplicado(cpf)) return alert("CPF já existe no sistema");
-  const endereco=prompt("Endereço do cliente:");
-  const telefone=prompt("Telefone do cliente:");
-  const valor=parseFloat(prompt("Valor emprestado:"));
-  const juros=parseFloat(prompt("Juros (%) do empréstimo:","30"));
-  const data=prompt("Data inicial (AAAA-MM-DD):",new Date().toISOString().split("T")[0]);
-  if(nome && endereco && telefone && !isNaN(valor) && !isNaN(juros)){
-    clientes.push({nome,cpf,endereco,telefone,emprestimos:[{valor,juros,data,historico:[]}],status:"ativo",obs:""});
-    atualizarTabela();
+/* ====== Comandas ====== */
+function adicionarComanda(){
+  let nome=prompt("Nome do cliente:");
+  let numero=prompt("Número da comanda:");
+  if(nome && numero){
+    comandas.push({nome,n:numero,total:0,produtos:[],vendidos:[],status:"aberta"});
+    atualizarComandas();
   }
 }
-
-/* ===== RELATORIOS E PNG ===== */
-function gerarPNG(i){
-  const cliente=clientes[i];
-  const div=document.createElement("div");
-  div.style.padding="20px"; div.style.background="#fff"; div.style.color="#000";
-  div.innerHTML=`<h2>Relatório de ${cliente.nome}</h2>
-    <p>CPF: ${cliente.cpf}</p>
-    <p>Endereço: ${cliente.endereco}</p>
-    <p>Telefone: ${cliente.telefone}</p>
-    <p>Empréstimos:</p>
-    <ul>${cliente.emprestimos.map(e=>`<li>Valor: R$ ${e.valor}, Juros: ${e.juros}%, Data: ${e.data}</li>`).join('')}</ul>`;
-  document.body.appendChild(div);
-  html2canvas(div).then(canvas=>{const img=canvas.toDataURL("image/png");const novaAba=window.open();novaAba.document.write('<img src="'+img+'"/>');document.body.removeChild(div);});
+function atualizarComandas(){
+  const abertas = document.getElementById("comandaAbertasTable");
+  const fechadas = document.getElementById("comandaFechadasTable");
+  abertas.innerHTML='<tr><th>Nome</th><th>Número</th><th>Total</th><th>Finalizar</th><th>Produtos</th><th>Vendidos</th></tr>';
+  fechadas.innerHTML='<tr><th>Nome</th><th>Número</th><th>Total</th><th>Comprovante PNG</th></tr>';
+  comandas.forEach((c,i)=>{
+    if(c.status==="aberta"){
+      let row = abertas.insertRow();
+      row.innerHTML=`
+        <td>${c.nome}</td>
+        <td>${c.n}</td>
+        <td>${c.total}</td>
+        <td><button onclick="finalizarComanda(${i})">✅</button></td>
+        <td contenteditable="true" oninput="c.produtos=this.innerText.split(',').map(x=>x.trim())">${c.produtos.join(", ")}</td>
+        <td class="produtos-vendidos">${c.vendidos.map(p=>`<span>${p}</span>`).join("")}</td>
+      `;
+    }else{
+      let row = fechadas.insertRow();
+      row.innerHTML=`
+        <td>${c.nome}</td>
+        <td>${c.n}</td>
+        <td>${c.total}</td>
+        <td><button onclick="exportComandaPNG(${i})">📸</button></td>
+      `;
+    }
+  });
+  localStorage.setItem("comandas", JSON.stringify(comandas));
+  syncComandasFirestore();
+}
+function finalizarComanda(idx){
+  comandas[idx].status="fechada";
+  atualizarComandas();
+}
+function exportComandaPNG(idx){
+  html2canvas(document.body).then(canvas=>{
+    let a=document.createElement("a");
+    a.href=canvas.toDataURL();
+    a.download=`comanda_${comandas[idx].nome}.png`;
+    a.click();
+  });
 }
 
-function gerarRelatorioGeral(){
-  const hoje=new Date();let totalEmprestado=0,totalJuros=0,totalDiarias=0;
-  clientes.forEach(c=>c.emprestimos.forEach(e=>{
-    const valor=parseFloat(e.valor); const juros=valor*(e.juros/100);
-    const dataInicial=new Date(e.data); const diasPassados=Math.floor((hoje-dataInicial)/(1000*60*60*24));
-    let multa=0;if(diasPassados>30)multa=(diasPassados-30)*30;
-    totalEmprestado+=valor; totalJuros+=juros; totalDiarias+=multa;
-  }));
-  const div=document.createElement("div"); div.style.padding="20px"; div.style.background="#fff"; div.style.color="#000";
-  let html=`<h2>Relatório Consolidado - ${hoje.toLocaleDateString("pt-BR")}</h2>`;
-  html+=`<p><b>Total Emprestado:</b> R$ ${totalEmprestado.toFixed(2)}</p>`;
-  html+=`<p><b>Total Retorno Juros:</b> R$ ${totalJuros.toFixed(2)}</p>`;
-  html+=`<p><b>Total Retorno Diárias:</b> R$ ${totalDiarias.toFixed(2)}</p>`;
-  html+="<table border='1' cellpadding='5' cellspacing='0'><tr><th>Nome</th><th>CPF</th><th>Status</th><th>Valor</th><th>Data</th><th>Score</th></tr>";
-  clientes.forEach(c=>{html+=`<tr><td>${c.nome}</td><td>${c.cpf}</td><td>${c.status}</td><td>${c.emprestimos.map(e=>"R$ "+e.valor).join(", ")}</td><td>${c.emprestimos.map(e=>new Date(e.data).toLocaleDateString("pt-BR")).join(", ")}</td><td>${calcularScore([].concat(...c.emprestimos.map(e=>e.historico)))}</td></tr>`;});
-  html+="</table>"; div.innerHTML=html;
-  document.body.appendChild(div);
-  html2canvas(div).then(canvas=>{const img=canvas.toDataURL("image/png");const novaAba=window.open();novaAba.document.write('<img src="'+img+'"/>');document.body.removeChild(div);});
+/* ====== Premiação ====== */
+document.getElementById("calcular").addEventListener("click",()=>{
+  let total = parseFloat(document.getElementById("valorTotal").value)||0;
+  let resultado = document.getElementById("resultado");
+  let divisao = {
+    campeao:250,
+    segundo:150,
+    terceiro:100,
+    quarto:70,
+    quinto:50,
+    sexto:40,
+    setimo:30,
+    oitavo:20,
+    nono:10
+  };
+  // Corrige diluição do quinto
+  let somaFixo=250+150+100+70+50; 
+  let restante=total-somaFixo; 
+  let div = {...divisao};
+  if(restante<0) restante=0; 
+  div.quinto+=restante/5;
+  premiosOriginais=div;
+  quintoAdicionado=false;
+  document.getElementById("salvarQuinto").disabled=false;
+  document.getElementById("desfazerQuinto").disabled=false;
+  resultado.innerHTML=`
+    <table>
+      <tr><th>Posição</th><th>Valor (R$)</th></tr>
+      ${Object.keys(div).map(k=>`<tr><td>${k}</td><td>${div[k].toFixed(2)}</td></tr>`).join("")}
+    </table>
+  `;
+});
+document.getElementById("salvarQuinto").addEventListener("click",()=>{
+  if(quintoAdicionado) return;
+  let div = {...premiosOriginais};
+  div.quinto=0;
+  quintoAdicionado=true;
+  document.getElementById("mensagem").style.display="block";
+  setTimeout(()=>document.getElementById("mensagem").style.display="none",2000);
+});
+document.getElementById("desfazerQuinto").addEventListener("click",()=>{
+  quintoAdicionado=false;
+  document.getElementById("mensagem").style.display="none";
+});
+
+/* ====== Firebase Realtime ====== */
+function syncRankingFirestore(){
+  db.collection("ranking").doc("principal").set({jogadores})
+    .then(()=>console.log("✅ Ranking Firestore atualizado"))
+    .catch(err=>console.error(err));
 }
-
-/* ===== FILTROS ===== */
-function filtrar(){const filtro=document.getElementById('buscaCliente').value.toLowerCase();
-  document.querySelectorAll("#tabelaClientes tbody tr").forEach(tr=>{tr.style.display=tr.cells[0].innerText.toLowerCase().includes(filtro)?'':'';});
+function syncComandasFirestore(){
+  db.collection("comandas").doc("principal").set({comandas})
+    .then(()=>console.log("✅ Comandas Firestore atualizadas"))
+    .catch(err=>console.error(err));
 }
+/* Escuta em tempo real */
+db.collection("ranking").doc("principal").onSnapshot(doc=>{
+  if(doc.exists){
+    jogadores=doc.data().jogadores||[];
+    atualizarRanking();
+  }
+});
+db.collection("comandas").doc("principal").onSnapshot(doc=>{
+  if(doc.exists){
+    comandas=doc.data().comandas||[];
+    atualizarComandas();
+  }
+});
 
-/* ===== ORDENAR ===== */
-function ordenarTabela(col){const tabela=document.getElementById("tabelaClientes"); let rows=[...tabela.tBodies[0].rows];
-  rows.sort((a,b)=>parseFloat(a.cells[col].innerText)-parseFloat(b.cells[col].innerText));
-  rows.forEach(r=>tabela.tBodies[0].appendChild(r));
-}
-
-/* ===== EXPORTAR EXCEL ===== */
-function exportExcel(){const wb=XLSX.utils.book_new();const ws=XLSX.utils.table_to_sheet(document.getElementById("tabelaClientes"));
-  XLSX.utils.book_append_sheet(wb,ws,"Clientes"); XLSX.writeFile(wb,"RelatorioLCJurista.xlsx");
-}
-
-/* ===== GRAFICOS ===== */
-let chartStatus, chartScore;
-function atualizarGraficos(){
-  const ativos=clientes.filter(c=>c.status==="ativo" || c.status==="reativado").length;
-  const quitados=clientes.filter(c=>c.status==="quitado").length;
-  const inadimplentes=clientes.filter(c=>calcularAtraso(c,new Date())>0 && (c.status==="ativo" || c.status==="reativado")).length;
-  const scores=clientes.map(c=>calcularScore([].concat(...c.emprestimos.map(e=>e.historico))));
-  if(chartStatus) chartStatus.destroy(); if(chartScore) chartScore.destroy();
-  const ctx1=document.getElementById("graficoStatus").getContext("2d");
-  chartStatus=new Chart(ctx1,{type:'pie',data:{labels:['Ativos/Reativados','Quitados','Inadimplentes'],datasets:[{data:[ativos,quitados,inadimplentes],backgroundColor:['#00aa00','#00ffff','#ff0000']}]},options:{responsive:true}});
-  const ctx2=document.getElementById("graficoScore").getContext("2d");
-  chartScore=new Chart(ctx2,{type:'bar',data:{labels:clientes.map(c=>c.nome),datasets:[{label:'Score',data:scores,backgroundColor:'#ffd700'}]},options:{responsive:true,scales:{y:{min:0,max:100}}}});
-}
-
-/* ===== TEMA ===== */
-function toggleTheme(){dark=!dark; document.body.classList.toggle('darkMode');}
-
-atualizarTabela();
-setInterval(atualizarTabela,60000);
+/* Inicializa visualizações */
+atualizarRanking();
+atualizarComandas();
 </script>
+
 </body>
 </html>
